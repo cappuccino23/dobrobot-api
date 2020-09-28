@@ -3,7 +3,7 @@ from flask import Flask, request
 
 from Dobrobot.pay_initiation import init_pay
 
-from Dobrobot.result import add_res_data
+from Dobrobot.result import add_res_data, answer_ok
 
 app = Flask(__name__)
 
@@ -25,7 +25,7 @@ def result():
 
         add_res_data(res_data)
 
-        return {"code": 0, "message": "Операция успешно проведена"}
+        return answer_ok()
 
     except ValueError:
         return 'Not OK'
