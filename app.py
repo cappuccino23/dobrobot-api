@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 
 from Dobrobot.pay_initiation import init_pay
 
