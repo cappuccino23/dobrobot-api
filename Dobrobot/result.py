@@ -1,17 +1,10 @@
-import hashlib
-import hmac
 import json
 
-import psycopg2
-import requests
 from flask import Flask
 
+from setting import conn
+
 app = Flask(__name__)
-
-api_key = 'ds9qKLc8lkl91oM8O71'
-secret_key = 'testdobrobot'
-
-conn = psycopg2.connect(dbname='payments_dobrobot', user='dobrobot', password='dobrobot', host='localhost')
 
 
 def add_res_data(res_data):
@@ -31,16 +24,12 @@ def add_res_data(res_data):
 
 
 def answer_ok():
-    req_data = json.dumps(
-        {
-            "code": 0,
-            "message": "Операция успешно проведена"
-        })
+    req_data = {"code": 0, "message": "Операция успешно проведена"}
 
-    sign = hmac.new(bytearray(secret_key, 'utf-8'), bytearray(req_data, 'utf-8'),
-                    digestmod=hashlib.sha256).hexdigest()
-    headers = {"Content-type": "application/json"}
-    url = ' https://demo-api2.inplat.ru/?api_key={0}&sign={1}'.format(api_key, sign)
-    answer = requests.get(url, params=req_data, headers=headers)
+    return 200, json.dumps(req_data)
 
-    return answer
+
+def answer_ko():
+    req_data = {"code": 500, "message": "Отказано в предоставлении услуги"}
+
+    return 400, json.dumps(req_data)

@@ -1,13 +1,15 @@
-import psycopg2
-from flask import Flask, request
+from flask import Flask, request, jsonify
 
 from Dobrobot.pay_initiation import init_pay
 
-from Dobrobot.result import add_res_data, answer_ok
+from Dobrobot.result import add_res_data, answer_ok, answer_ko
 
 app = Flask(__name__)
 
-conn = psycopg2.connect(dbname='payments_dobrobot', user='dobrobot', password='dobrobot', host='localhost')
+
+@app.route("/")
+def hello():
+    return "<h1 style='color:blue'>Hello There!</h1>"
 
 
 @app.route('/add', methods=['POST'])
@@ -28,8 +30,9 @@ def result():
         return answer_ok()
 
     except ValueError:
-        return 'Not OK'
+
+        return answer_ko()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run()
