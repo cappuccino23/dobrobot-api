@@ -10,17 +10,19 @@ app = Flask(__name__)
 def add_res_data(res_data):
     cursor = conn.cursor()
 
+    exec_dict = {key: str(value) if callable(getattr(value, '__iter__', None)) else value for key, value in res_data.items()}
+
+    print(exec_dict)
+
     query = "INSERT INTO public.result (method, pid, pay_type, status, code, params, credentials, pstamp, astamp, merc_data)" \
-            "VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id"
+            "VALUES(%(method)s, %(id)s, %(pay_type)s, %(status)s, %(code)s, %(params)s, %(credentials)s, %(pstamp)s, %(astamp)s, %(merc_data)s)"
 
-    cursor.execute(query, (tuple(str(value) if isinstance(value, dict) else value for value in res_data.values())))
-
-    add_id = cursor.fetchone()
+    cursor.execute(query, exec_dict)
 
     conn.commit()
     conn.close()
 
-    return add_id
+    return
 
 
 def answer_ok():
