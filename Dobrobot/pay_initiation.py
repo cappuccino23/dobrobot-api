@@ -11,7 +11,6 @@ app = Flask(__name__)
 
 
 def init_pay(in_data):
-
     merc_pid = add_init_pay(in_data)
 
     parameters = in_data
@@ -34,7 +33,7 @@ def init_pay(in_data):
 
     add_to_logs(rec_json)
 
-    return 'Ok'
+    return
 
 
 def add_init_pay(in_data):
@@ -55,13 +54,11 @@ def add_to_logs(rec_json):
     cursor = conn.cursor()
 
     query = "INSERT INTO public.logs(code, message, pay_url, success_callback_url, fail_callback_url, success_redirect_url, fail_redirect_url, init_stamp)" \
-            "VALUES(%s, %s, %s, %s, %s, %s, %s, CURRENT_TIMESTAMP) RETURNING pay_url"
+            "VALUES(%(code)s, %(message)s, %(url)s, %(success_callback_url)s, %(fail_callback_url)s, %(success_redirect_url)s, %(fail_redirect_url)s, CURRENT_TIMESTAMP)"
 
-    cursor.execute(query, tuple(rec_json.values()))
-
-    add_url = cursor.fetchone()
+    cursor.execute(query, rec_json)
 
     conn.commit()
     conn.close()
 
-    return add_url
+    return
