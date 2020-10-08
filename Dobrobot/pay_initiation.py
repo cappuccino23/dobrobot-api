@@ -59,6 +59,5 @@ def add_to_logs(rec_json):
     cursor.execute(query, rec_json)
 
     conn.commit()
-    conn.close()
 
     return
