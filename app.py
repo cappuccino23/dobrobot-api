@@ -1,8 +1,12 @@
+import jsonschema
 from flask import Flask, request
+from jsonschema import validate
 
 from Dobrobot.pay_initiation import init_pay
 
 from Dobrobot.result import add_res_data, answer_ok, answer_ko
+
+from setting import schema
 
 app = Flask(__name__)
 
@@ -15,9 +19,16 @@ def hello():
 @app.route('/add', methods=['POST'])
 def add():
     in_data = request.get_json()
-    init_pay(in_data)
 
-    return 'ok'
+    try:
+        validate(instance=in_data, schema=schema)
+        init_pay(in_data)
+
+        return {"message": "Запрос принят"}
+
+    except jsonschema.exceptions.ValidationError:
+
+        return {"message": "неверный формат запроса"}
 
 
 @app.route('/result', methods=['POST'])
