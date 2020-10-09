@@ -31,9 +31,11 @@ def init_pay(in_data):
 
     rec_json = r.json()
 
+    pay_url = rec_json['url']
+
     add_to_logs(rec_json)
 
-    return
+    return {"pay_url": pay_url}
 
 
 def add_init_pay(in_data):
@@ -53,8 +55,10 @@ def add_init_pay(in_data):
 def add_to_logs(rec_json):
     cursor = conn.cursor()
 
-    query = "INSERT INTO public.logs(code, message, pay_url, success_callback_url, fail_callback_url, success_redirect_url, fail_redirect_url, init_stamp)" \
-            "VALUES(%(code)s, %(message)s, %(url)s, %(success_callback_url)s, %(fail_callback_url)s, %(success_redirect_url)s, %(fail_redirect_url)s, CURRENT_TIMESTAMP)"
+    query = "INSERT INTO public.logs(code, message, pay_url, success_callback_url, fail_callback_url, " \
+            "success_redirect_url, fail_redirect_url, init_stamp)" \
+            "VALUES(%(code)s, %(message)s, %(url)s, %(success_callback_url)s, %(fail_callback_url)s, " \
+            "%(success_redirect_url)s, %(fail_redirect_url)s, CURRENT_TIMESTAMP)"
 
     cursor.execute(query, rec_json)
 
