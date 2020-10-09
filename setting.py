@@ -23,3 +23,6 @@ schema = {
         "account": {"type": "string"},
     },
 }
+
+# ------------- Headers ------------
+headers = {"Content-type": "application/json"}

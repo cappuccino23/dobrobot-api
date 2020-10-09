@@ -1,4 +1,5 @@
 import jsonschema
+import requests
 from flask import Flask, request
 from jsonschema import validate
 
@@ -6,7 +7,7 @@ from Dobrobot.pay_initiation import init_pay
 
 from Dobrobot.result import add_res_data, answer_ok, answer_ko
 
-from setting import schema
+from setting import schema, headers
 
 app = Flask(__name__)
 
@@ -22,9 +23,11 @@ def add():
 
     try:
         validate(instance=in_data, schema=schema)
+        # answer = {"message": "Запрос принят"}
+        # requests.post(url_in, data=answer, headers=headers)
         init_pay(in_data)
 
-        return {"message": "Запрос принят"}
+        return
 
     except jsonschema.exceptions.ValidationError:
 
