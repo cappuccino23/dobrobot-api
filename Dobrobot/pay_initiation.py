@@ -5,7 +5,7 @@ import json
 import requests
 from flask import Flask
 
-from setting import secret_key, api_key, conn
+from setting import secret_key, api_key, conn, headers
 
 app = Flask(__name__)
 
@@ -25,7 +25,7 @@ def init_pay(in_data):
 
     sign = hmac.new(bytearray(secret_key, 'utf-8'), bytearray(req_data, 'utf-8'),
                     digestmod=hashlib.sha256).hexdigest()
-    headers = {"Content-type": "application/json"}
+
     url = 'https://demo-api2.inplat.ru/?api_key={0}&sign={1}'.format(api_key, sign)
     r = requests.post(url, data=req_data, headers=headers)
 
